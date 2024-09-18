@@ -9,7 +9,7 @@
 class TCS34725
 {
 	static constexpr std::uint8_t ADDRESS = 0x29U;
-	static const constexpr std::array<std::uint8_t, 4> ids{ 0x4DU, 0x10U, 0x44U, 0x12U };
+	static const constexpr std::array<std::uint8_t, 3> ids{ 0x4DU, 0x10U, 0x44U };
 
 	static constexpr std::uint8_t COMMAND_BIT = 0x80U;
 

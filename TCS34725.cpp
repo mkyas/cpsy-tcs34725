@@ -31,7 +31,7 @@ TCS34725::TCS34725(int smbus, std::uint8_t address) : smbus(0), address(address)
 		throw std::runtime_error("Device does not exist");
 	}
 
-	if (ioctl(this->smbus, I2C_SLAVE, address & 0x7f) < 0) {
+	if (ioctl(this->smbus, I2C_SLAVE, this->address & 0x7f) < 0) {
 		throw std::runtime_error("Address not found");
 	}
 
