@@ -48,6 +48,7 @@ TCS34725::TCS34725(int smbus, std::uint8_t address) : smbus(0), address(address)
 
 TCS34725::~TCS34725()
 {
+	this->disable();
 	close(this->smbus);
 }
 
