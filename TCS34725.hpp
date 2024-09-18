@@ -9,51 +9,36 @@
 class TCS34725
 {
 	static constexpr std::uint8_t ADDRESS = 0x29U;
+	static const constexpr std::array<std::uint8_t, 4> ids{ 0x4DU, 0x10U, 0x44U, 0x12U };
 
 	static constexpr std::uint8_t COMMAND_BIT = 0x80U;
 
 	static constexpr std::uint8_t ENABLE      = 0x00U;
-	static constexpr std::uint8_t ENABLE_PON  = 0x01U;
-	static constexpr std::uint8_t ENABLE_AEN  = 0x02U;
 
 	static constexpr std::uint8_t ATIME       = 0x01U;
+	static constexpr std::uint8_t AILT        = 0x04U;
+	static constexpr std::uint8_t AIHT        = 0x06U;
+	static constexpr std::uint8_t APERS       = 0x0CU;
 	static constexpr std::uint8_t CONTROL     = 0x0FU;
+	static constexpr std::uint8_t SENSORID    = 0x12U;
+	static constexpr std::uint8_t STATUS      = 0x13U;
 
-	static constexpr std::uint8_t ID = 0x12U;
+	static constexpr std::uint8_t CDATA       = 0x14U;
+	static constexpr std::uint8_t RDATA       = 0x16U; 
+	static constexpr std::uint8_t GDATA       = 0x18U;
+	static constexpr std::uint8_t BDATA       = 0x1AU;
 
-	static constexpr std::uint8_t CDATAL = 0x14U; /**< Clear channel data low byte */
-	static constexpr std::uint8_t CDATAH = 0x15U; /**< Clear channel data high byte */
-	static constexpr std::uint8_t RDATAL = 0x16U; 
-	static constexpr std::uint8_t RDATAH = 0x17U;
-	static constexpr std::uint8_t GDATAL = 0x18U;
-	static constexpr std::uint8_t GDATAH = 0x19U;
-	static constexpr std::uint8_t BDATAL = 0x1AU;
-	static constexpr std::uint8_t BDATAH = 0x1BU;
+	static constexpr std::uint8_t ENABLE_PON  = 0x01U;
+	static constexpr std::uint8_t ENABLE_AEN  = 0x02U;
+	static constexpr std::uint8_t ENABLE_WEN  = 0x08U;
+	static constexpr std::uint8_t ENABLE_AIEN = 0x02U;
 
 public:
-        enum integration_time : std::uint8_t {
-		INTEGRATION_TIME_2P4MS = 0xFFU,
-		INTEGRATION_TIME_24MS  = 0xF6U,
-		INTEGRATION_TIME_50MS  = 0xEBU,
-		INTEGRATION_TIME_101MS = 0xD5U,
-		INTEGRATION_TIME_154MS = 0xC0U,
-		INTEGRATION_TIME_700MS = 0x00U,
-	};
-
 	enum gain_t : std::uint8_t {
 		GAIN_1X  = 0x00U,
 		GAIN_4X  = 0x01U,
 		GAIN_16X = 0x02U,
 		GAIN_60X = 0x03U,
-	};
-
-	enum wait_time_t : std::uint16_t {
-		WAIT_TIME_2P4MS  = 0x0FFU,
-		WAIT_TIME_204MS  = 0x0ABU,
-		WAIT_TIME_614MS  = 0x000U,
-		WAIT_TIME_29MS   = 0x1FFU,
-		WAIT_TIME_2450MS = 0x1ABU,
-		WAIT_TIME_7400MS = 0x100U,
 	};
 
 private:
@@ -73,6 +58,9 @@ public:
 	void set_gain(gain_t);
 	void get_raw(std::array<std::uint16_t, 4>&);
 	void get_rgb(float&, float&, float&);
+private:
+	inline void delay(void);
+	inline bool valid(void);
 };
 
 #endif
