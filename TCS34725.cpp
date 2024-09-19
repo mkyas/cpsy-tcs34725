@@ -28,11 +28,11 @@ TCS34725::TCS34725(int smbus, std::uint8_t address) : smbus(0), address(address)
 		// Exceptions are usually avoided or forbidden in embedded code.
 		// We like to avoid some ideoms from embedded programming
 		// to realise the RAII principle.
-		throw std::runtime_error("Device does not exist");
+		throw std::runtime_error("SMBus does not exist");
 	}
 
 	if (ioctl(this->smbus, I2C_SLAVE, this->address & 0x7f) < 0) {
-		throw std::runtime_error("Address not found");
+		throw std::runtime_error("TCS34725::Address not found");
 	}
 
 	std::uint8_t id = i2c_smbus_read_byte_data(this->smbus,
@@ -91,12 +91,21 @@ void TCS34725::disable(void)
 			TCS34725::COMMAND_BIT | TCS34725::ENABLE, enabled);
 }
 
-void TCS34725::set_integration_time(std::uint8_t it)
+void TCS34725::set_integration_time_cycles(std::uint8_t it)
 {
 	this->integration_time = it;
 	i2c_smbus_write_byte_data(this->smbus,
 			TCS34725::COMMAND_BIT | TCS34725::ATIME,
 			this->integration_time);
+}
+
+void TCS34725::set_integration_time(float ms)
+{
+	if (255 * 2.4 < ms) {
+		throw std::runtime_error("TCS34725: integration time too long");
+	}
+	std::uint8_t cycles = static_cast<std::uint8_t>(256 - ms / 2.4);
+	this->set_integration_time_cycles(cycles);
 }
 
 void TCS34725::set_gain(TCS34725::gain_t gain)
@@ -130,7 +139,7 @@ void TCS34725::get_rgb(float& r, float& g, float& b)
 		r = g = b = 0;
 		return;
 	}
-	r = static_cast<float>(color[0]) / static_cast<float>(color[3]) * 255.0;
-	g = static_cast<float>(color[1]) / static_cast<float>(color[3]) * 255.0;
-	b = static_cast<float>(color[2]) / static_cast<float>(color[3]) * 255.0;
+	r = static_cast<float>(color[0]) / static_cast<float>(color[3]);
+	g = static_cast<float>(color[1]) / static_cast<float>(color[3]);
+	b = static_cast<float>(color[2]) / static_cast<float>(color[3]);
 }

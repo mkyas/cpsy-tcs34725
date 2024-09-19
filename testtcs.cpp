@@ -5,7 +5,7 @@
 int main()
 {
 	TCS34725 sensor;
-	std::array<std::uint16_t, 4> result;
+	std::array<std::uint16_t, 4> result{};
 	sensor.get_raw(result);
 	for (auto v : result) {
 		std::cout << v << " ";

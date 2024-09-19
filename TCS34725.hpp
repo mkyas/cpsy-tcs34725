@@ -54,7 +54,8 @@ public:
 
 	void enable(void);
 	void disable(void);
-	void set_integration_time(std::uint8_t);
+	void set_integration_time_cycles(std::uint8_t);
+	void set_integration_time(float);
 	void set_gain(gain_t);
 	void get_raw(std::array<std::uint16_t, 4>&);
 	void get_rgb(float&, float&, float&);
